@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:toonflix/button.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-          backgroundColor: Color(0xFF181818),
+          backgroundColor: const Color(0xFF181818),
           body: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+              ),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 80,
                     ),
                     Row(
@@ -24,7 +29,7 @@ class MyApp extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text(
+                            const Text(
                               'Hey, Selena',
                               style: TextStyle(
                                 color: Colors.white,
@@ -43,7 +48,7 @@ class MyApp extends StatelessWidget {
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 120,
                     ),
                     Text(
@@ -53,10 +58,10 @@ class MyApp extends StatelessWidget {
                         color: Colors.white.withOpacity(0.8),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
-                    Text(
+                    const Text(
                       '\$5 194 482',
                       style: TextStyle(
                         fontSize: 48,
@@ -64,29 +69,23 @@ class MyApp extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     Row(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              color: Color(0xFFF2B33A),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(50),
-                              )),
-                          child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 20,
-                                horizontal: 50,
-                              ),
-                              child: Text(
-                                'Transfer',
-                                style: TextStyle(
-                                  fontSize: 22,
-                                ),
-                              )),
-                        )
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        // custom widget : Button
+                        Button(
+                          text: 'Transfer',
+                          bgcolor: Color(0xFFF2B33A),
+                          txtcolor: Colors.black,
+                        ),
+                        Button(
+                          text: 'Request',
+                          bgcolor: Color(0xFF1F2123),
+                          txtcolor: Colors.white,
+                        ),
                       ],
                     ),
                   ]))),
