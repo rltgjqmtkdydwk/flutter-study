@@ -92,7 +92,7 @@ class MyApp extends StatelessWidget {
                       height: 100,
                     ),
                     Row(
-                      // main:가로, cross: 세로 column-main세로, cross 가로
+                      // row - main가로, cross세로 // column - main세로, cross가로
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
