@@ -15,7 +15,6 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
           backgroundColor: const Color(0xFF181818),
           body: SingleChildScrollView(
-            // 스크롤 가능
             child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
@@ -116,7 +115,6 @@ class MyApp extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      // 커스텀 카드 위젯
                       const CurrencyCard(
                         name: 'Euro',
                         code: 'EUR',
