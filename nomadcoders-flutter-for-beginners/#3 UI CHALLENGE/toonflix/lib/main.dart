@@ -115,6 +115,8 @@ class MyApp extends StatelessWidget {
                       height: 20,
                     ),
                     Container(
+                      // clipBehavior : 어떤 아이템이 overflow 됐을 때, 그걸 포함한 container가 어떻게 동작하게 할건지 알려줌.
+                      clipBehavior: Clip.hardEdge, // 나머지 부분을 숨김
                       decoration: BoxDecoration(
                         color: const Color(0xFF1F2123),
                         borderRadius: BorderRadius.circular(25),
@@ -122,6 +124,7 @@ class MyApp extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(30),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,6 +162,18 @@ class MyApp extends StatelessWidget {
                                   ],
                                 )
                               ],
+                            ),
+                            // Transform
+                            Transform.scale(
+                              scale: 2.2,
+                              child: Transform.translate(
+                                offset: const Offset(-5, 12),
+                                child: const Icon(
+                                  Icons.euro_rounded,
+                                  color: Colors.white,
+                                  size: 88,
+                                ),
+                              ),
                             ),
                           ],
                         ),
