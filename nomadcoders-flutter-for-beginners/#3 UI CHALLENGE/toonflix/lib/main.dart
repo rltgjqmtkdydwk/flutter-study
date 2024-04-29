@@ -92,7 +92,6 @@ class MyApp extends StatelessWidget {
                       height: 100,
                     ),
                     Row(
-                      // row - main가로, cross세로 // column - main세로, cross가로
                       crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -106,8 +105,7 @@ class MyApp extends StatelessWidget {
                         Text(
                           'View all',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(
-                                0.8), // withOpacity() : 메소드에 값이 전달되는 방식이기 때문에 const 사용x
+                            color: Colors.white.withOpacity(0.8),
                             fontSize: 18,
                           ),
                         ),
@@ -119,7 +117,7 @@ class MyApp extends StatelessWidget {
                     Container(
                       decoration: BoxDecoration(
                         color: const Color(0xFF1F2123),
-                        borderRadius: BorderRadius.circular(25), // const 사용x
+                        borderRadius: BorderRadius.circular(25),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(30),
