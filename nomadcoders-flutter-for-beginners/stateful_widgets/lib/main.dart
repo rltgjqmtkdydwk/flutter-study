@@ -12,13 +12,11 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  int counter = 0;
+  List<int> numbers = [];
 
   void onClicked() {
     setState(() {
-      //setState() : 새로운 데이터를 반영한 ui를 새로고침(build를 다시 호출)한다.
-      //인터렉티브한 스크린을 위해 필요함
-      counter += 1;
+      numbers.add(numbers.length); //가독성을 위해 setState(){} 안에 작성
     });
   }
 
@@ -35,10 +33,7 @@ class _AppState extends State<App> {
                 'Click Count',
                 style: TextStyle(fontSize: 30),
               ),
-              Text(
-                '$counter', //state에게 새로운 데이터가 있다고 알려줘야한다!-> setState()
-                style: const TextStyle(fontSize: 30),
-              ),
+              for (var n in numbers) Text('$n'), //Collection for : 리스트를 생성할 때, 조건문에 따라 element 추가
               IconButton(
                 iconSize: 40,
                 onPressed: onClicked,
