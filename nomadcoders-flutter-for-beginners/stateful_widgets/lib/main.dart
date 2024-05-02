@@ -11,12 +11,15 @@ class App extends StatefulWidget {
   State<App> createState() => _AppState();
 }
 
-// Stateful위젯의 STATE : 상태에 따라 변하는 데이터를 넣을 수 있다
 class _AppState extends State<App> {
-  int counter = 0; // final이 아님(변하는 값)
+  int counter = 0;
 
   void onClicked() {
-    counter += 1;
+    setState(() {
+      //setState() : 새로운 데이터를 반영한 ui를 새로고침(build를 다시 호출)한다.
+      //인터렉티브한 스크린을 위해 필요함
+      counter += 1;
+    });
   }
 
   @override
@@ -33,7 +36,7 @@ class _AppState extends State<App> {
                 style: TextStyle(fontSize: 30),
               ),
               Text(
-                '$counter', //눌러도 버튼이 작동하지 않는다?
+                '$counter', //state에게 새로운 데이터가 있다고 알려줘야한다!-> setState()
                 style: const TextStyle(fontSize: 30),
               ),
               IconButton(
