@@ -16,32 +16,51 @@ class _AppState extends State<App> {
 
   void onClicked() {
     setState(() {
-      numbers.add(numbers.length); //가독성을 위해 setState(){} 안에 작성
+      numbers.add(numbers.length);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    // BuildContext : 위젯 트리에서 위젯의 위치를 제공 -> 먼 부모요소 데이터에 접근할 수 있음!
     return MaterialApp(
+      // theme : app의 스타일시트
+      theme: ThemeData(
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(
+            color: Colors.red,
+          ),
+        ),
+      ),
       home: Scaffold(
         backgroundColor: const Color(0xFFF4EDDB),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Click Count',
-                style: TextStyle(fontSize: 30),
-              ),
-              for (var n in numbers) Text('$n'), //Collection for : 리스트를 생성할 때, 조건문에 따라 element 추가
-              IconButton(
-                iconSize: 40,
-                onPressed: onClicked,
-                icon: const Icon(Icons.add_box_rounded),
-              ),
+            children: const [
+              MyLargeTitle(),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class MyLargeTitle extends StatelessWidget {
+  const MyLargeTitle({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'My Large Title',
+      style: TextStyle(
+        fontSize: 30,
+        color:
+            Theme.of(context).textTheme.titleLarge?.color, //context를 통해 데이터 참조
+        //(null은 참조할 수 없기 때문에 null safety 필요)
       ),
     );
   }
