@@ -13,9 +13,17 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   bool showTitle = true;
+  IconData currentIcon = Icons.visibility;
+
   void toggleTitle() {
     setState(() {
       showTitle = !showTitle;
+
+      if (currentIcon == Icons.visibility) {
+        currentIcon = Icons.visibility_off;
+      } else {
+        currentIcon = Icons.visibility;
+      }
     });
   }
 
@@ -36,9 +44,7 @@ class _AppState extends State<App> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               showTitle ? const MyLargeTitle() : const Text("nothing"),
-              IconButton(
-                  onPressed: toggleTitle,
-                  icon: const Icon(Icons.remove_red_eye))
+              IconButton(onPressed: toggleTitle, icon: Icon(currentIcon))
             ],
           ),
         ),
