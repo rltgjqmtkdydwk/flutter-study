@@ -57,6 +57,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return duration.toString().split(".").first.substring(2, 7);
   }
 
+  // timer 정지 후 초기화
+  void onResetPressed() {
+    totalSeconds = 0;
+    totalPomodoros -= 1;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,21 +82,38 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        // 실행 버튼
+        // 타이머 조작 버튼
         Flexible(
-            flex: 2,
-            child: Center(
-              child: IconButton(
-                iconSize: 120,
-                color: Theme.of(context).cardColor,
-                onPressed: isRunning ? onPausePressed : onStartPressed,
-                icon: Icon(
-                  isRunning
-                      ? Icons.pause_circle_filled_outlined
-                      : Icons.play_circle_outline,
-                ),
+          flex: 2,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    iconSize: 120,
+                    color: Theme.of(context).cardColor,
+                    onPressed: isRunning ? onPausePressed : onStartPressed,
+                    icon: Icon(
+                      isRunning
+                          ? Icons.pause_circle_filled_outlined
+                          : Icons.play_circle_outline,
+                    ),
+                  ),
+                  IconButton(
+                    iconSize: 120,
+                    onPressed: onResetPressed,
+                    icon: const Icon(
+                      Icons.stop_circle_outlined,
+                    ),
+                    color: Theme.of(context).cardColor,
+                  ),
+                ],
               ),
-            )),
+            ],
+          ),
+        ),
         // pomodoros 표시
         Flexible(
             flex: 1,
