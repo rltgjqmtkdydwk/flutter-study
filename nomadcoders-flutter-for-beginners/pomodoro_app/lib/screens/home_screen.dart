@@ -12,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   // 타이머 기능
   int totalseconds = 1500;
+  bool isRunning = false;
   late Timer timer;
 
   void onTick(Timer timer) {
@@ -27,6 +28,15 @@ class _HomeScreenState extends State<HomeScreen> {
       const Duration(seconds: 1),
       onTick,
     );
+    setState(() {
+      isRunning = true;
+    });
+  }
+
+  // pause 기능
+  void onPausePressed() {
+    timer.cancel(); // 타이머 정지
+    isRunning = false;
   }
 
   @override
@@ -55,8 +65,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 iconSize: 120,
                 color: Theme.of(context)
                     .cardColor, //BuildContext를 이용해 다른 위젯의 cardColor 참조
-                onPressed: onStartPressed, // 타이머 실행(멈추지 않음)
-                icon: const Icon(Icons.play_circle_outline),
+                onPressed: isRunning
+                    ? onPausePressed
+                    : onStartPressed, // isRunning에 따라 일시정지 : 실행
+                icon: Icon(
+                  isRunning
+                      ? Icons.play_circle_outline
+                      : Icons.pause_circle_filled_outlined,
+                ), // isRunning에 따라 실행버튼 : 일시정지버튼
               ),
             )),
         Flexible(
