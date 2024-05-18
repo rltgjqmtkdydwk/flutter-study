@@ -10,12 +10,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  static const twentyFiveMinutes = 1500;
   // 타이머 기능
-  int totalseconds = 1500;
+  int totalseconds = twentyFiveMinutes;
   bool isRunning = false;
+  int totalPomodoros = 0;
   late Timer timer;
 
   void onTick(Timer timer) {
+    if (totalseconds == 0) {
+      setState(() {
+        totalPomodoros = totalPomodoros + 1;
+        isRunning = false;
+        totalseconds = totalseconds - 1;
+      });
+    }
     // state를 변경(totalseconds-1)
     setState(() {
       totalseconds -= 1;
@@ -31,6 +40,11 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isRunning = true;
     });
+  }
+
+  String format(int seconds) {
+    var duration = Duration(seconds: seconds);
+    return duration.toString().split(".").first.substring(2, 7);
   }
 
   // pause 기능
@@ -49,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Container(
             alignment: Alignment.bottomCenter,
             child: Text(
-              '$totalseconds',
+              format(totalseconds),
               style: TextStyle(
                   color: Theme.of(context)
                       .cardColor, //BuildContext를 이용해 다른 위젯의 cardColor 참조
@@ -98,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .displayLarge!
                                   .color),
                         ),
-                        Text('0',
+                        Text('$totalPomodoros',
                             style: TextStyle(
                               fontSize: 58,
                               fontWeight: FontWeight.w600,
