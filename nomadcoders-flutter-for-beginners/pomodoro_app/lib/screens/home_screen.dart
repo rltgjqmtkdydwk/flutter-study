@@ -11,28 +11,29 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   static const twentyFiveMinutes = 1500;
-  // 타이머 기능
-  int totalseconds = twentyFiveMinutes;
-  bool isRunning = false;
-  int totalPomodoros = 0;
+  int totalSeconds = twentyFiveMinutes;
+  bool isRunning = false; // 실행여부
+  int totalPomodoros = 0; // pomodoro 성공 횟수
   late Timer timer;
 
+  // timer 초기화
   void onTick(Timer timer) {
-    if (totalseconds == 0) {
+    if (totalSeconds == 0) {
       setState(() {
-        totalPomodoros = totalPomodoros + 1;
+        totalPomodoros += 1;
         isRunning = false;
-        totalseconds = totalseconds - 1;
+        totalSeconds = twentyFiveMinutes;
+      });
+      timer.cancel(); // 타이머 정지
+    } else {
+      setState(() {
+        totalSeconds -= 1;
       });
     }
-    // state를 변경(totalseconds-1)
-    setState(() {
-      totalseconds -= 1;
-    });
   }
 
+  // timer 시작
   void onStartPressed() {
-    // timer는 매 초마다 onTick()을 실행시킴
     timer = Timer.periodic(
       const Duration(seconds: 1),
       onTick,
@@ -42,15 +43,18 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  // timer 정지
+  void onPausePressed() {
+    timer.cancel();
+    setState(() {
+      isRunning = false;
+    });
+  }
+
+  // 시간형식 포맷
   String format(int seconds) {
     var duration = Duration(seconds: seconds);
     return duration.toString().split(".").first.substring(2, 7);
-  }
-
-  // pause 기능
-  void onPausePressed() {
-    timer.cancel(); // 타이머 정지
-    isRunning = false;
   }
 
   @override
@@ -58,37 +62,36 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Column(children: [
+        // 타이머
         Flexible(
           flex: 1,
           child: Container(
             alignment: Alignment.bottomCenter,
             child: Text(
-              format(totalseconds),
+              format(totalSeconds),
               style: TextStyle(
-                  color: Theme.of(context)
-                      .cardColor, //BuildContext를 이용해 다른 위젯의 cardColor 참조
+                  color: Theme.of(context).cardColor,
                   fontSize: 89,
                   fontWeight: FontWeight.w600),
             ),
           ),
         ),
+        // 실행 버튼
         Flexible(
             flex: 2,
             child: Center(
               child: IconButton(
                 iconSize: 120,
-                color: Theme.of(context)
-                    .cardColor, //BuildContext를 이용해 다른 위젯의 cardColor 참조
-                onPressed: isRunning
-                    ? onPausePressed
-                    : onStartPressed, // isRunning에 따라 일시정지 : 실행
+                color: Theme.of(context).cardColor,
+                onPressed: isRunning ? onPausePressed : onStartPressed,
                 icon: Icon(
                   isRunning
-                      ? Icons.play_circle_outline
-                      : Icons.pause_circle_filled_outlined,
-                ), // isRunning에 따라 실행버튼 : 일시정지버튼
+                      ? Icons.pause_circle_filled_outlined
+                      : Icons.play_circle_outline,
+                ),
               ),
             )),
+        // pomodoros 표시
         Flexible(
             flex: 1,
             child: Row(
@@ -96,8 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
-                        color: Theme.of(context)
-                            .cardColor, //BuildContext를 이용해 다른 위젯의 cardColor 참조
+                        color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(50)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -118,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontWeight: FontWeight.w600,
                               color: Theme.of(context)
                                   .textTheme
-                                  .displayLarge! //이미 앞서 정의해줬기 때문에 null이 아니라는 뜻
+                                  .displayLarge!
                                   .color,
                             )),
                       ],
