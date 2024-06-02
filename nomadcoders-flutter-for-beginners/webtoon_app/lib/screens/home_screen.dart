@@ -9,7 +9,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-//stateful
+//기초적인 data fetching : state 쓰기
 class _HomeScreenState extends State<HomeScreen> {
   List<WebtoonModel> webtoons = [];
   bool isLoading = true;
@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
-  //initState() : build메서드 재실행
+  //initState() : 초기 데이터 로드
   @override
   void initState() {
     super.initState();
