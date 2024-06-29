@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:webtoon_app/model/webtoon_model.dart';
 import 'package:webtoon_app/services/api_service.dart';
+import 'package:webtoon_app/widget/webtoon_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -53,35 +54,10 @@ class HomeScreen extends StatelessWidget {
           vertical: 10, horizontal: 20), // 이미지 상단 그림자 표시하기 위한 padding
       itemBuilder: (context, index) {
         var webtoon = snapshot.data![index];
-        return Column(
-          children: [
-            Container(
-              width: 250,
-              clipBehavior:
-                  Clip.hardEdge, //clipBehavior: 자식이 부모영역에 침범하는 것을 제어하는 방법
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 15,
-                    offset: const Offset(10, 10),
-                    color: Colors.black
-                        .withOpacity(0.5), //color를 가장 나중에 설정하면 보기 편함
-                  ),
-                ],
-              ),
-              child: Image.network(webtoon.thumb), //Image 위젯
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              webtoon.title,
-              style: const TextStyle(
-                fontSize: 18,
-              ),
-            ),
-          ],
+        return Webtoon(
+          title: webtoon.title,
+          thumb: webtoon.thumb,
+          id: webtoon.id,
         );
       },
       separatorBuilder: (context, index) => const SizedBox(
