@@ -19,8 +19,10 @@ class Webtoon extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
+          //다른 화면으로 이동하는 것처럼 보이는 효과(새로운 stateless위젯을 렌더링했을 뿐인데)
           MaterialPageRoute(
             builder: (context) => DetailScreen(
+              //DetailScreen widget에 똑같은 param 전달(화면에 중복되는 title, thumb을 간편하게 구성하기 위해)
               title: title,
               thumb: thumb,
               id: id,
