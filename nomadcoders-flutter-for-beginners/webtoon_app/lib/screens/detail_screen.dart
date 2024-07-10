@@ -4,6 +4,7 @@ import 'package:webtoon_app/model/webtoon_episode_model.dart';
 import 'package:webtoon_app/services/api_service.dart';
 
 class DetailScreen extends StatefulWidget {
+  // stateless -> stateful 변환한 이유: initState() 쓰려고
   final String title, thumb, id;
 
   const DetailScreen({
@@ -22,7 +23,7 @@ class _DetailScreenState extends State<DetailScreen> {
   late Future<WebtoonDetailModel> webtoon;
   late Future<List<WebtoonEpisodeModel>> episodes;
 
-  //late Future변수인 webtoon 안전하게 초기화
+  //late Future변수인 webtoon, episodes 안전하게 초기화
   @override
   void initState() {
     super.initState();
@@ -43,66 +44,119 @@ class _DetailScreenState extends State<DetailScreen> {
           style: const TextStyle(fontSize: 24),
         ),
       ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 50,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(50),
+          child: Column(
             children: [
-              //같은 tag를 공유할 때 애니메이션
-              Hero(
-                tag: widget.id,
-                child: Container(
-                  width: 250,
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 15,
-                        offset: const Offset(10, 10),
-                        color: Colors.black.withOpacity(0.5),
+              const SizedBox(
+                height: 50,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  //같은 tag를 공유할 때 애니메이션
+                  Hero(
+                    tag: widget.id,
+                    child: Container(
+                      width: 250,
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 15,
+                            offset: const Offset(10, 10),
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                        ],
                       ),
-                    ],
+                      child: Image.network(widget.thumb),
+                    ),
                   ),
-                  child: Image.network(widget.thumb),
-                ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              FutureBuilder(
+                future: webtoon,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          snapshot.data!.about,
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          '${snapshot.data!.age} / ${snapshot.data!.genre}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    );
+                  }
+                  return const Text("...");
+                },
+              ), //builder : widget을 return하는 함수
+              const SizedBox(
+                height: 25,
+              ),
+              FutureBuilder(
+                future: episodes,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    // episodes를 어떻게 화면에 그릴 것인가? ListView vs Column
+                    // list가 많으면 ListView, 적으면 최적화를 위해 Column
+                    return Column(
+                      children: [
+                        for (var episode in snapshot.data!)
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.green.shade300,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 20,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  // episode 제목이 길어질 경우, flexible 사용
+                                  Flexible(
+                                    fit: FlexFit.loose,
+                                    child: Text(
+                                      episode.title,
+                                      softWrap: false,
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 16),
+                                    ),
+                                  ),
+                                  const Icon(
+                                    Icons.chevron_right_rounded,
+                                    color: Colors.white,
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                      ],
+                    );
+                  }
+                  return Container();
+                },
               ),
             ],
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          FutureBuilder(
-            future: webtoon,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        snapshot.data!.about,
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      Text(
-                        '${snapshot.data!.age} / ${snapshot.data!.genre}',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                );
-              }
-              return const Text("...");
-            },
-          ), //builder : widget을 return하는 함수
-        ],
+        ),
       ),
     );
   }
