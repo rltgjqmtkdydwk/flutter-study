@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:webtoon_app/model/webtoon_datail_model.dart';
 import 'package:webtoon_app/model/webtoon_episode_model.dart';
 import 'package:webtoon_app/services/api_service.dart';
+import 'package:webtoon_app/widget/episode_widget.dart'; //widget으로 분리
 
 class DetailScreen extends StatefulWidget {
   // stateless -> stateful 변환한 이유: initState() 쓰려고
@@ -115,38 +116,9 @@ class _DetailScreenState extends State<DetailScreen> {
                     return Column(
                       children: [
                         for (var episode in snapshot.data!)
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.green.shade300,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 10,
-                                horizontal: 20,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  // episode 제목이 길어질 경우, flexible 사용
-                                  Flexible(
-                                    fit: FlexFit.loose,
-                                    child: Text(
-                                      episode.title,
-                                      softWrap: false,
-                                      style: const TextStyle(
-                                          color: Colors.white, fontSize: 16),
-                                    ),
-                                  ),
-                                  const Icon(
-                                    Icons.chevron_right_rounded,
-                                    color: Colors.white,
-                                  )
-                                ],
-                              ),
-                            ),
+                          Episode(
+                            episode: episode,
+                            webtoonId: widget.id,
                           )
                       ],
                     );
