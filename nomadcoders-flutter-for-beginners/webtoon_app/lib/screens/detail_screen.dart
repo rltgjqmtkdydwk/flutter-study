@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; //shared_preferences로 핸드폰 저장소에 데이터 저장하기
 import 'package:webtoon_app/model/webtoon_datail_model.dart';
 import 'package:webtoon_app/model/webtoon_episode_model.dart';
 import 'package:webtoon_app/services/api_service.dart';
@@ -23,6 +24,24 @@ class _DetailScreenState extends State<DetailScreen> {
   //초기화하고 싶은 변수가 있지만 constructor에서 불가능한 경우, late
   late Future<WebtoonDetailModel> webtoon;
   late Future<List<WebtoonEpisodeModel>> episodes;
+  late SharedPreferences prefs;
+  bool isLiked = false;
+
+  //가장 먼저, 핸드폰 저장소와 연결할 connection 만들어주기(=초기화)
+  Future initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    final likedToons = prefs.getStringList('likedToons'); //'likedToons' key 확인
+    if (likedToons != null) {
+      if (likedToons.contains(widget.id) == true) {
+        //!!! initState를 했더라도 좋아요 상태를 유지하려면 setState를 해야함(ui 새로고침)
+        setState(() {
+          isLiked = true; //좋아요를 누른 웹툰
+        });
+      }
+    } else {
+      prefs.setStringList('likedToons', []);
+    }
+  }
 
   //late Future변수인 webtoon, episodes 안전하게 초기화
   @override
@@ -31,6 +50,25 @@ class _DetailScreenState extends State<DetailScreen> {
     webtoon = ApiService.getToonById(widget.id);
     episodes = ApiService.getLatestEpisodesById(widget.id);
     //별개의 class(=state<DetailScreen>)에 data(=id)가 들어가기 때문에, 해당 widget class(stateful widget)를 통해 data를 전달해야 한다.
+    initPrefs();
+  }
+
+  onHeartTab() async {
+    final likedToons = prefs.getStringList('likedToons'); //리스트 가져오기
+    if (likedToons != null) {
+      if (isLiked) {
+        //좋아요 한 웹툰
+        likedToons.remove(widget.id);
+      } else {
+        //좋아요하지 않은 웹툰
+        likedToons.add(widget.id);
+      }
+      //핸드폰 저장소 업데이트
+      await prefs.setStringList('likedToons', likedToons);
+      setState(() {
+        isLiked != isLiked; //좋아요 상태 바꾸기
+      });
+    }
   }
 
   @override
@@ -44,6 +82,15 @@ class _DetailScreenState extends State<DetailScreen> {
           widget.title, //웹툰이름으로 표시
           style: const TextStyle(fontSize: 24),
         ),
+        actions: [
+          //좋아요 누른 리스트 반영하는 action
+          IconButton(
+            onPressed: onHeartTab,
+            icon: Icon(
+              isLiked ? Icons.favorite : Icons.favorite_outline,
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
